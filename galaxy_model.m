@@ -1,4 +1,6 @@
 function [] = galaxy_model() % M
+%
+% Author : nicolas.douillet9 (at) gmail.com, 2016-2024.
 
 
 % Spiral galaxy parameter set example :
@@ -25,7 +27,7 @@ nb_stars = 5e4;  % number of stars
 amplitude = 0.5; % thickness of the galactic disk
 radius = 1;      % basis radius
 curvature = 9;   % the higher this value is, the greater the spiral is wrapped around itself
-nb_arms = 1;     % number of arms, integer
+nb_arms = 2;     % number of arms, integer
 way = -1;        % -1 / 1 : rotation way
 R0 = 3;          % radius translation parameter
 mean_val = 2;    % influence stars density at the centre
@@ -47,7 +49,7 @@ profile_view = true;
 starsize = 'adaptated'; % 'constant'
 az = 0; % -40; % azimut
 el = 90; % 78; % elevation
-zoom_lvl = 1.5;
+zoom_lvl = 1.3;
 
 % Data distribution
 R = radius*(randn(1,nb_stars)) + mean_val;
@@ -69,7 +71,7 @@ Phi = angle(X+Y*1i);
 % Spiral shape handle function
 %
 % f = @(A,s,c,r,m,angl,p) A*exp(-(r.^2)/sdn^3).*sin(s*c*log(r)+m*angl+p*pi); 
-f = @(A,s,c,r,m,angl,p) A*exp(-(((r-mean_val).^2)/2/radius^2)/sdn^3).*sin(s*c*log(r)+m*angl+p*pi)/radius/sqrt(2*pi); 
+f = @(A,s,c,r,m,angl,p) A*exp(-(((r-mean_val).^2)/2/radius^2)/sdn^3).*sinc(s*c*log(r)+m*angl+p*pi).^4/radius/sqrt(2*pi); 
 
 Z = f(amplitude,way,curvature,R+R0,nb_arms,Phi,k);
 
@@ -91,7 +93,7 @@ set(gcf,'Color',[0 0 0]);
 
 % Color parameters
 %
-colormap('bone'); % 'bone', 'hot', 'autumn', etc.
+colormap(flipud(1-jet)); % 'bone', 'hot', 'autumn', etc.
 cmap = colormap;
 
 % % RGB color filters
